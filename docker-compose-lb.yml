@@ -1,0 +1,67 @@
+version: '3.6'
+services:
+  nginx-lb:
+    image: nginx:alpine
+    ports:
+      - "8080:80"
+    volumes:
+      - ./nginx-lb.conf:/etc/nginx/nginx.conf:ro
+    depends_on:
+      - backend1
+      - backend2
+    networks:
+      - common
+  
+  backend1:
+    container_name: backend1
+    build:
+      context: flask/
+      dockerfile: Dockerfile
+    ports:
+      - "5001:5000"
+    volumes:
+      - ./flask:/code
+    environment:
+      FLASK_ENV: development
+    networks:
+      - common
+  
+  backend2:
+    container_name: backend2
+    build:
+      context: flask/
+      dockerfile: Dockerfile
+    ports:
+      - "5002:5000"
+    volumes:
+      - ./flask:/code
+    environment:
+      FLASK_ENV: development
+    networks:
+      - common
+
+  front:
+    build:
+      context: ./front
+    ports:
+      - "8081:80"  # Updated port to avoid conflict with nginx-lb
+    volumes:
+      - ./front:/app
+    networks:
+      - common
+
+  nginx:
+    image: nginx:alpine
+    container_name: nginx
+    volumes:
+      - ./front/public:/usr/share/nginx/html
+      - ./default.conf:/etc/nginx/conf.d/default.conf
+    ports:
+      - "80:80"
+    depends_on:
+      - backend1  # Adjusted to depend on backend1
+    networks:
+      - common
+
+networks:
+  common:

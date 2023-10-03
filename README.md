@@ -50,11 +50,11 @@ This project is a microservices-based implementation of the Tic Tac Toe game, ut
 
 2. **Build and Run the Services:**
    ```sh
-   docker-compose up --build
+   docker-compose up --build (on docker-compose.yml)
    ```
 
 3. **Access the Application:**
-   - Open a web browser and navigate to [http://localhost:8081](http://localhost:8081) to access the Tic Tac Toe game.
+   - Open a web browser and navigate to [http://localhost:8080](http://localhost:8080) to access the Tic Tac Toe game.
 
 ### Running Pact Tests
 
